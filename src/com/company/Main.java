@@ -14,6 +14,7 @@ public class Main {
         while (!isFinished()) {
             hitTypes[0] = generateBossDefenceType();
             round();
+            health[4] = medicAtion();
         }
     }
 
@@ -38,16 +39,18 @@ public class Main {
 
         Random r = new Random();
         int randomNumber = r.nextInt(6) + 1; //Generate random number 1 to 5
+        if (health[0] <= 0) {
+            System.out.println("Boss is dead");
+            return health[0] * 1;
+        }
         if (hitTypes[0].equals(hitTypes[playerIndex])) {
             System.out.println(hitTypes[playerIndex] + " нанес критический удар "
                     + damage[playerIndex] * randomNumber);
-            return health[0] - damage[playerIndex];
-        }
-        if (playerIndex == 4) {
-            int randomPlayerNumber = r.nextInt(4);
-            System.out.println("Медик вылечил " + hitTypes[randomPlayerNumber]);
-            return damage[4] += health[randomPlayerNumber];
+            if (health[0] <= 0) {
+                System.out.println("Boss is deaad!!");
 
+            }
+            return health[0] - damage[playerIndex];
         }
 
         return health[0] - damage[playerIndex] * randomNumber;
@@ -56,7 +59,8 @@ public class Main {
     public static void printStatistics() {
 
         System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\nBoss health - " + health[0] + "\n" +
-                "Varior health - " + health[1] + "\nMagic health - " + health[2] + "\nKinetic health - " + health[3] + "\n");
+                "Varior health - " + health[1] + "\nMagic health - " + health[2] + "\nKinetic health - "
+                + health[3] + "\n");
         /*System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
         System.out.println("Boss health " + health[0]);
         System.out.println("Varior health " + health[1]);
@@ -73,6 +77,7 @@ public class Main {
             health[0] = hitBoss(i);
         }
 
+
         printStatistics();
     }
 
@@ -82,5 +87,16 @@ public class Main {
         int randomDefence = r.nextInt(3) + 1;
 
         return hitTypes[randomDefence];
+    }
+
+    public static int medicAtion() {
+        Random rnd = new Random();
+        int randomPlayerNumber = rnd.nextInt(4);
+        if (randomPlayerNumber == 0) {
+            System.out.println("Боссу не досталось лекарства");
+            return health[randomPlayerNumber];
+        }
+        System.out.println("Medic treat " + hitTypes[randomPlayerNumber]);
+        return health[randomPlayerNumber] += damage[4];
     }
 }
